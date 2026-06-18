@@ -1,0 +1,24 @@
+{
+  "name": "pokeapp-with-retro8-ui",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@11.8.0",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "generate:github-pages": "nuxt build --preset github_pages",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck"
+  },
+  "dependencies": {
+    "@lucide/vue": "^1.21.0",
+    "nuxt": "^4.4.8",
+    "retro8-ui": "^0.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "typescript": "^6.0.3",
+    "vue-tsc": "^3.3.5"
+  }
+}
