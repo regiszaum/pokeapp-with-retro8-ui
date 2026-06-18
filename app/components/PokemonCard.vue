@@ -26,24 +26,33 @@
     <div class="pokemon-card__actions">
       <button
         class="r8-btn r8-btn--sm pokemon-icon-btn"
-        :class="favorite ? 'r8-btn--primary' : 'r8-btn--secondary'"
+        :class="favorite ? 'r8-btn--danger' : 'r8-btn--secondary'"
         type="button"
         :aria-label="favorite ? `Remover ${pokemon.displayName} dos favoritos` : `Favoritar ${pokemon.displayName}`"
-        :title="favorite ? 'Remover favorito' : 'Favoritar'"
+        data-r8-toggle="tooltip"
+        :data-r8-target="`#tip-fav-${pokemon.name}`"
         @click="$emit('toggleFavorite', pokemon.name)"
       >
         <Heart class="pokemon-icon" aria-hidden="true" :fill="favorite ? 'currentColor' : 'none'" />
       </button>
+      <div :id="`tip-fav-${pokemon.name}`" class="r8-poptip" data-r8-variant="hint" hidden>
+        {{ favorite ? 'Remover favorito' : 'Favoritar' }}
+      </div>
+
       <button
         class="r8-btn r8-btn--sm pokemon-icon-btn"
-        :class="caught ? 'r8-btn--primary' : 'r8-btn--secondary'"
+        :class="caught ? 'r8-btn--success' : 'r8-btn--secondary'"
         type="button"
         :aria-label="caught ? `Marcar ${pokemon.displayName} como não capturado` : `Marcar ${pokemon.displayName} como capturado`"
-        :title="caught ? 'Capturado' : 'Marcar capturado'"
+        data-r8-toggle="tooltip"
+        :data-r8-target="`#tip-caught-${pokemon.name}`"
         @click="$emit('toggleCaught', pokemon.name)"
       >
         <Check class="pokemon-icon" aria-hidden="true" />
       </button>
+      <div :id="`tip-caught-${pokemon.name}`" class="r8-poptip" data-r8-variant="hint" hidden>
+        {{ caught ? 'Capturado' : 'Marcar capturado' }}
+      </div>
     </div>
   </article>
 </template>

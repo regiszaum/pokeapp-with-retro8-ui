@@ -1,0 +1,363 @@
+<template>
+  <main id="pokedex" class="dex-main">
+    <section class="dex-hero" aria-labelledby="dex-title">
+      <div class="dex-hero__copy">
+        <span class="dex-kicker">National Dex</span>
+        <h1 id="dex-title">Pokedex profissional</h1>
+        <p>
+          Catálogo completo por geração, tipo, captura, favoritos, cadeia evolutiva,
+          estatísticas, dano recebido e variantes oficiais da PokeAPI.
+        </p>
+      </div>
+      <div class="dex-hero__stats" aria-label="Resumo da Pokedex">
+        <div class="dex-stat">
+          <span>Espécies</span>
+          <strong>{{ bootstrap?.totalSpecies ?? '...' }}</strong>
+        </div>
+        <div class="dex-stat">
+          <span>Gerações</span>
+          <strong>{{ bootstrap?.generations.length ?? '...' }}</strong>
+        </div>
+        <div class="dex-stat">
+          <span>Capturados</span>
+          <strong>{{ caughtNames.length }}</strong>
+        </div>
+        <div class="dex-stat">
+          <span>Favoritos</span>
+          <strong>{{ favoriteNames.length }}</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="r8-panel dex-controls" aria-label="Filtros da Pokedex">
+      <div class="r8-panel__header dex-controls__header">
+        <div>
+          <h2 class="r8-panel__title">Filtros</h2>
+          <p class="r8-panel__meta">
+            {{ filteredPokemon.length }} registros encontrados
+          </p>
+        </div>
+        <button class="r8-btn r8-btn--sm r8-btn--secondary" type="button" @click="resetFilters">
+          <RotateCcw class="pokemon-icon" aria-hidden="true" />
+          Limpar
+        </button>
+      </div>
+
+      <div class="r8-panel__body dex-controls__body">
+        <label class="r8-field dex-search">
+          <span class="r8-label">Busca</span>
+          <div class="r8-input-shell" data-r8-clearable="true">
+            <span class="r8-input__prefix">
+              <Search class="pokemon-icon" aria-hidden="true" />
+            </span>
+            <input
+              v-model.trim="search"
+              class="r8-input"
+              type="search"
+              placeholder="Nome, número, geração ou região"
+              autocomplete="off"
+            >
+          </div>
+        </label>
+
+        <label class="r8-field">
+          <span class="r8-label">Geração</span>
+          <select v-model="generationFilter" class="r8-input">
+            <option value="all">Todas</option>
+            <option
+              v-for="generation in bootstrap?.generations"
+              :key="generation.id"
+              :value="String(generation.id)"
+            >
+              {{ generation.label }} · {{ generation.region }}
+            </option>
+          </select>
+        </label>
+
+        <label class="r8-field">
+          <span class="r8-label">Tipo</span>
+          <select v-model="typeFilter" class="r8-input">
+            <option value="all">Todos</option>
+            <option v-for="type in bootstrap?.types" :key="type.name" :value="type.name">
+              {{ type.displayName }}
+            </option>
+          </select>
+        </label>
+
+        <label class="r8-field">
+          <span class="r8-label">Ordenar</span>
+          <select v-model="sortMode" class="r8-input">
+            <option value="national">National Dex</option>
+            <option value="name">Nome</option>
+            <option value="generation">Geração</option>
+            <option value="captured">Capturados primeiro</option>
+            <option value="favorites">Favoritos primeiro</option>
+          </select>
+        </label>
+
+        <label class="r8-field">
+          <span class="r8-label">Por página</span>
+          <select v-model.number="pageSize" class="r8-input">
+            <option :value="12">12</option>
+            <option :value="24">24</option>
+            <option :value="48">48</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section id="generations" class="generation-strip" aria-label="Atalhos por geração">
+      <button
+        class="r8-btn r8-btn--sm"
+        :class="generationFilter === 'all' ? 'r8-btn--primary' : 'r8-btn--secondary'"
+        type="button"
+        @click="generationFilter = 'all'"
+      >
+        Todas
+      </button>
+      <button
+        v-for="generation in bootstrap?.generations"
+        :key="generation.id"
+        class="r8-btn r8-btn--sm"
+        :class="generationFilter === String(generation.id) ? 'r8-btn--primary' : 'r8-btn--secondary'"
+        type="button"
+        @click="generationFilter = String(generation.id)"
+      >
+        {{ generation.label }}
+        <span class="generation-strip__region">{{ generation.region }}</span>
+      </button>
+    </section>
+
+    <section class="dex-list-section" aria-labelledby="list-title">
+      <div class="dex-list-header">
+        <div>
+          <span class="dex-kicker">Box</span>
+          <h2 id="list-title">Registros</h2>
+        </div>
+        <div class="dex-pagination">
+          <button
+            class="r8-btn r8-btn--sm r8-btn--secondary pokemon-icon-btn"
+            type="button"
+            aria-label="Página anterior"
+            :disabled="page <= 1"
+            @click="page -= 1"
+          >
+            <ChevronLeft class="pokemon-icon" aria-hidden="true" />
+          </button>
+          <span>{{ page }} / {{ totalPages }}</span>
+          <button
+            class="r8-btn r8-btn--sm r8-btn--secondary pokemon-icon-btn"
+            type="button"
+            aria-label="Próxima página"
+            :disabled="page >= totalPages"
+            @click="page += 1"
+          >
+            <ChevronRight class="pokemon-icon" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+
+      <div v-if="pending" class="pokemon-grid" aria-busy="true">
+        <div v-for="index in pageSize" :key="index" class="r8-skeleton r8-skeleton--card pokemon-card">
+          <div class="r8-skeleton__line r8-skeleton__line--short" />
+          <div class="r8-skeleton__media" />
+          <div class="r8-skeleton__title" />
+          <div class="r8-skeleton__line r8-skeleton__line--medium" />
+          <div class="r8-skeleton__footer">
+            <div class="r8-skeleton__button" />
+            <div class="r8-skeleton__button" />
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="error" class="r8-panel dex-error">
+        <div class="r8-panel__body">
+          <strong>Não foi possível carregar a PokeAPI.</strong>
+          <p>{{ error.message }}</p>
+          <button class="r8-btn r8-btn--primary" type="button" @click="retryBootstrap">
+            Tentar novamente
+          </button>
+        </div>
+      </div>
+
+      <div v-else-if="pagedPokemon.length" class="pokemon-grid">
+        <PokemonCard
+          v-for="pokemon in pagedPokemon"
+          :key="pokemon.name"
+          :pokemon="pokemon"
+          :selected="false"
+          :favorite="favoriteSet.has(pokemon.name)"
+          :caught="caughtSet.has(pokemon.name)"
+          @select="goToDetail"
+          @toggle-favorite="toggleFavorite"
+          @toggle-caught="toggleCaught"
+        />
+      </div>
+
+      <div v-else class="r8-panel dex-empty">
+        <div class="r8-panel__body">
+          <Search class="dex-empty__icon" aria-hidden="true" />
+          <strong>Nenhum registro encontrado.</strong>
+          <p>Ajuste busca, tipo ou geração para continuar explorando.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</template>
+
+<script setup lang="ts">
+import { ChevronLeft, ChevronRight, RotateCcw, Search } from '@lucide/vue'
+import type { PokedexBootstrap, PokemonEntry } from '../types/pokedex'
+import { fetchPokedexBootstrap } from '../utils/pokeapi-client'
+
+useHead({ title: 'RetroDex Pro — Pokedex' })
+
+const route = useRoute()
+const router = useRouter()
+
+const emptyBootstrap: PokedexBootstrap = {
+  generatedAt: '',
+  totalSpecies: 0,
+  generations: [],
+  types: [],
+  typeIndex: {},
+  pokemon: []
+}
+
+const { data: bootstrap, pending, error, refresh } = await useAsyncData<PokedexBootstrap>(
+  'pokedex-bootstrap',
+  fetchPokedexBootstrap,
+  { default: () => emptyBootstrap, server: false }
+)
+
+// Query params sync
+const search = ref(String(route.query.q ?? ''))
+const generationFilter = ref(String(route.query.gen ?? 'all'))
+const typeFilter = ref(String(route.query.type ?? 'all'))
+const sortMode = ref<'national' | 'name' | 'generation' | 'captured' | 'favorites'>(
+  (route.query.sort as any) ?? 'national'
+)
+const page = ref(Number(route.query.page) || 1)
+const pageSize = ref(Number(route.query.size) || 24)
+
+const favoriteNames = ref<string[]>([])
+const caughtNames = ref<string[]>([])
+const favoriteSet = computed(() => new Set(favoriteNames.value))
+const caughtSet = computed(() => new Set(caughtNames.value))
+
+const selectedTypeSet = computed(() => {
+  if (!bootstrap.value || typeFilter.value === 'all') return null
+  return new Set(bootstrap.value.typeIndex[typeFilter.value] ?? [])
+})
+
+const filteredPokemon = computed(() => {
+  const query = search.value.toLowerCase()
+  const typeSet = selectedTypeSet.value
+
+  const filtered = (bootstrap.value?.pokemon ?? []).filter((pokemon) => {
+    const matchesGeneration =
+      generationFilter.value === 'all' || pokemon.generationId === Number(generationFilter.value)
+    const matchesType = !typeSet || typeSet.has(pokemon.name)
+    const matchesQuery =
+      !query ||
+      pokemon.name.includes(query) ||
+      pokemon.displayName.toLowerCase().includes(query) ||
+      pokemon.id.toString() === query ||
+      pokemon.id.toString().padStart(4, '0').includes(query) ||
+      pokemon.generationLabel.toLowerCase().includes(query) ||
+      pokemon.region.toLowerCase().includes(query)
+    return matchesGeneration && matchesType && matchesQuery
+  })
+
+  return sortPokemon(filtered)
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredPokemon.value.length / pageSize.value)))
+
+const pagedPokemon = computed(() => {
+  const start = (page.value - 1) * pageSize.value
+  return filteredPokemon.value.slice(start, start + pageSize.value)
+})
+
+// Sync filters -> query params
+watch([search, generationFilter, typeFilter, sortMode, page, pageSize], () => {
+  const query: Record<string, string> = {}
+  if (search.value) query.q = search.value
+  if (generationFilter.value !== 'all') query.gen = generationFilter.value
+  if (typeFilter.value !== 'all') query.type = typeFilter.value
+  if (sortMode.value !== 'national') query.sort = sortMode.value
+  if (page.value > 1) query.page = String(page.value)
+  if (pageSize.value !== 24) query.size = String(pageSize.value)
+  router.replace({ query })
+})
+
+watch([search, generationFilter, typeFilter, pageSize, sortMode], () => {
+  page.value = 1
+})
+
+watch(totalPages, (value) => {
+  if (page.value > value) page.value = value
+})
+
+onMounted(() => {
+  favoriteNames.value = readStorageList('retrodex:favorites')
+  caughtNames.value = readStorageList('retrodex:caught')
+})
+
+watch(favoriteNames, (v) => writeStorageList('retrodex:favorites', v), { deep: true })
+watch(caughtNames, (v) => writeStorageList('retrodex:caught', v), { deep: true })
+
+function sortPokemon(pokemon: PokemonEntry[]): PokemonEntry[] {
+  return [...pokemon].sort((a, b) => {
+    if (sortMode.value === 'name') return a.displayName.localeCompare(b.displayName)
+    if (sortMode.value === 'generation') return a.generationId - b.generationId || a.id - b.id
+    if (sortMode.value === 'captured') {
+      return Number(caughtSet.value.has(b.name)) - Number(caughtSet.value.has(a.name)) || a.id - b.id
+    }
+    if (sortMode.value === 'favorites') {
+      return Number(favoriteSet.value.has(b.name)) - Number(favoriteSet.value.has(a.name)) || a.id - b.id
+    }
+    return a.id - b.id
+  })
+}
+
+function goToDetail(name: string) {
+  const pokemon = bootstrap.value?.pokemon.find((p) => p.name === name)
+  if (pokemon) navigateTo(`/pokemon/${pokemon.id}`)
+}
+
+function toggleFavorite(name: string) {
+  favoriteNames.value = toggleInList(favoriteNames.value, name)
+}
+
+function toggleCaught(name: string) {
+  caughtNames.value = toggleInList(caughtNames.value, name)
+}
+
+function resetFilters() {
+  search.value = ''
+  generationFilter.value = 'all'
+  typeFilter.value = 'all'
+  sortMode.value = 'national'
+  pageSize.value = 24
+}
+
+function retryBootstrap() {
+  void refresh()
+}
+
+function toggleInList(list: string[], value: string): string[] {
+  return list.includes(value) ? list.filter((i) => i !== value) : [...list, value]
+}
+
+function readStorageList(key: string): string[] {
+  try {
+    const v = localStorage.getItem(key)
+    return v ? JSON.parse(v) : []
+  } catch { return [] }
+}
+
+function writeStorageList(key: string, value: string[]) {
+  localStorage.setItem(key, JSON.stringify(value))
+}
+</script>

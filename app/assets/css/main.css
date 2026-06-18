@@ -1,4 +1,6 @@
-:root {
+/* === Dark theme (default) === */
+:root,
+[data-theme="dark"] {
   color-scheme: dark;
   --dex-bg: #121217;
   --dex-surface: #1b1b24;
@@ -13,6 +15,70 @@
   --dex-cell: rgba(255, 255, 255, 0.035);
 }
 
+/* === Light theme === */
+[data-theme="light"] {
+  color-scheme: light;
+  --dex-bg: #f5f3ee;
+  --dex-surface: #ffffff;
+  --dex-surface-2: #eae8e3;
+  --dex-ink: #1c1721;
+  --dex-muted: #5e5a52;
+  --dex-line: #d4d0c8;
+  --dex-accent: #c9930a;
+  --dex-red: #d63838;
+  --dex-green: #1d8f55;
+  --dex-blue: #1a7fb5;
+  --dex-cell: rgba(0, 0, 0, 0.04);
+}
+
+/* Override Retro8 components for dark theme */
+[data-theme="dark"] .r8-panel {
+  background-color: var(--dex-surface);
+  color: var(--dex-ink);
+  border-color: var(--dex-line);
+}
+
+[data-theme="dark"] .r8-input,
+[data-theme="dark"] select.r8-input {
+  background-color: var(--dex-surface-2);
+  color: var(--dex-ink);
+  border-color: var(--dex-line);
+}
+
+[data-theme="light"] .r8-panel {
+  background-color: var(--dex-surface);
+  color: var(--dex-ink);
+  border-color: var(--dex-line);
+}
+
+[data-theme="light"] .r8-input,
+[data-theme="light"] select.r8-input {
+  background-color: var(--dex-surface-2);
+  color: var(--dex-ink);
+  border-color: var(--dex-line);
+}
+
+/* === Color vision: Protanopia (red-blind) === */
+[data-color-vision="protanopia"] {
+  --dex-red: #c4a000;
+  --dex-green: #56c8ff;
+  --dex-accent: #ffd740;
+}
+
+/* === Color vision: Deuteranopia (green-blind) === */
+[data-color-vision="deuteranopia"] {
+  --dex-red: #d4a017;
+  --dex-green: #56c8ff;
+  --dex-accent: #ffcb47;
+}
+
+/* === Color vision: Tritanopia (blue-blind) === */
+[data-color-vision="tritanopia"] {
+  --dex-blue: #ff8a80;
+  --dex-green: #47d18c;
+  --dex-accent: #ff9e40;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -23,9 +89,11 @@ html {
 
 body {
   margin: 0;
+  font-family: "Pixelify Sans", sans-serif;
+  font-optical-sizing: auto;
   background:
-    linear-gradient(transparent 31px, rgba(255, 255, 255, 0.035) 32px),
-    linear-gradient(90deg, transparent 31px, rgba(255, 255, 255, 0.035) 32px),
+    linear-gradient(transparent 31px, var(--dex-cell) 32px),
+    linear-gradient(90deg, transparent 31px, var(--dex-cell) 32px),
     var(--dex-bg);
   background-size: 32px 32px;
   color: var(--dex-ink);
@@ -104,9 +172,9 @@ button:disabled {
 }
 
 .dex-hero__copy {
-  background: #1a1a20;
+  background: var(--dex-surface);
   border: 2px solid var(--dex-line);
-  box-shadow: 0 0 0 4px #0d0d12;
+  box-shadow: 0 0 0 4px var(--dex-bg);
   min-height: 220px;
   padding: clamp(1rem, 3vw, 2rem);
 }
@@ -204,10 +272,8 @@ button:disabled {
 }
 
 .dex-workbench {
-  align-items: start;
   display: grid;
   gap: 1rem;
-  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
 }
 
 .dex-list-section {
@@ -250,7 +316,7 @@ button:disabled {
 }
 
 .pokemon-card.is-caught::before {
-  background: var(--dex-green);
+  background: var(--r8-color-success);
   content: "";
   height: 0.45rem;
   left: 0;
@@ -273,7 +339,7 @@ button:disabled {
 }
 
 .pokemon-card__number {
-  color: var(--dex-muted);
+  color: var(--r8-color-primary);
   font-size: 0.75rem;
 }
 
@@ -283,7 +349,7 @@ button:disabled {
   background:
     linear-gradient(transparent 15px, var(--dex-cell) 16px),
     linear-gradient(90deg, transparent 15px, var(--dex-cell) 16px),
-    #181820;
+    var(--dex-surface-2);
   background-size: 16px 16px;
   display: flex;
   justify-content: center;
@@ -373,7 +439,7 @@ button:disabled {
   background:
     linear-gradient(transparent 15px, rgba(255, 203, 71, 0.14) 16px),
     linear-gradient(90deg, transparent 15px, rgba(255, 203, 71, 0.14) 16px),
-    #15151b;
+    var(--dex-surface-2);
   background-size: 16px 16px;
   border: 2px solid var(--dex-line);
   display: flex;
@@ -433,7 +499,7 @@ button:disabled {
 }
 
 .detail-metric {
-  background: #17171d;
+  background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   min-width: 0;
   padding: 0.75rem;
@@ -484,7 +550,7 @@ button:disabled {
 }
 
 .stat-row__bar {
-  background: #111116;
+  background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   height: 0.85rem;
   overflow: hidden;
@@ -504,7 +570,7 @@ button:disabled {
 }
 
 .detail-list div {
-  background: #17171d;
+  background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   padding: 0.65rem;
 }
@@ -537,7 +603,7 @@ button:disabled {
 
 .evolution-node {
   align-items: center;
-  background: #17171d;
+  background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   display: flex;
   gap: 0.65rem;
@@ -564,7 +630,7 @@ button:disabled {
 }
 
 .move-pill {
-  background: #17171d;
+  background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   display: inline-flex;
   gap: 0.4rem;
@@ -578,7 +644,7 @@ button:disabled {
 
 .detail-skeleton {
   animation: pulse 1.2s ease-in-out infinite;
-  background: #2e2d3e;
+  background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   height: 1rem;
   width: 11rem;
