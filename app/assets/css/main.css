@@ -1,6 +1,6 @@
 /* === Dark theme (default) === */
 :root,
-[data-theme="dark"] {
+[data-theme='dark'] {
   color-scheme: dark;
   --dex-bg: #121217;
   --dex-surface: #1b1b24;
@@ -13,10 +13,12 @@
   --dex-green: #47d18c;
   --dex-blue: #56c8ff;
   --dex-cell: rgba(255, 255, 255, 0.035);
+  --r8-font-body: 'Pixelify Sans', sans-serif;
+  --r8-font-display: 'Pixelify Sans', sans-serif;
 }
 
 /* === Light theme === */
-[data-theme="light"] {
+[data-theme='light'] {
   color-scheme: light;
   --dex-bg: #f5f3ee;
   --dex-surface: #ffffff;
@@ -32,48 +34,102 @@
 }
 
 /* Override Retro8 components for dark theme */
-[data-theme="dark"] .r8-panel {
+[data-theme='dark'] .r8-panel {
   background-color: var(--dex-surface);
   color: var(--dex-ink);
   border-color: var(--dex-line);
 }
 
-[data-theme="dark"] .r8-input,
-[data-theme="dark"] select.r8-input {
+[data-theme='dark'] .dex-controls__header,
+[data-theme='dark'] .about-panel__header {
+  background-color: var(--dex-surface-2);
+  border-color: var(--dex-line);
+}
+
+[data-theme='dark'] .dex-controls__header .r8-panel__title,
+[data-theme='dark'] .about-panel__header .r8-panel__title {
+  color: var(--dex-ink);
+}
+
+[data-theme='dark'] .dex-controls__header .r8-panel__meta,
+[data-theme='dark'] .about-panel__header .r8-panel__meta {
+  color: var(--dex-muted);
+}
+
+[data-theme='dark'] .r8-input,
+[data-theme='dark'] select.r8-input {
   background-color: var(--dex-surface-2);
   color: var(--dex-ink);
   border-color: var(--dex-line);
 }
 
-[data-theme="light"] .r8-panel {
+[data-theme='dark'] .app-select .r8-select__trigger {
+  background: var(--dex-surface-2);
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
+}
+
+[data-theme='dark'] .app-select .r8-select__menu {
+  background: var(--dex-surface);
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
+}
+
+[data-theme='dark'] .app-select .r8-select__option {
+  background: var(--dex-surface-2);
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
+}
+
+[data-theme='dark'] .app-select .r8-select__option.is-active:not(.is-selected) {
+  background: var(--dex-surface);
+}
+
+[data-theme='dark'] .app-select .r8-select__option.is-selected,
+[data-theme='dark'] .app-select .r8-select__option[aria-selected='true'] {
+  background: var(--dex-accent);
+  color: #1c1721;
+}
+
+[data-theme='dark'] .dex-controls__body .r8-label {
+  color: var(--dex-ink);
+}
+
+[data-theme='light'] .r8-panel {
   background-color: var(--dex-surface);
   color: var(--dex-ink);
   border-color: var(--dex-line);
 }
 
-[data-theme="light"] .r8-input,
-[data-theme="light"] select.r8-input {
+[data-theme='light'] .r8-input,
+[data-theme='light'] select.r8-input {
   background-color: var(--dex-surface-2);
   color: var(--dex-ink);
   border-color: var(--dex-line);
+}
+
+[data-theme='light'] .dex-search .r8-input-shell,
+[data-theme='light'] .dex-search .r8-input-shell:focus-within {
+  background: var(--dex-surface);
+  border-color: var(--r8-color-border);
 }
 
 /* === Color vision: Protanopia (red-blind) === */
-[data-color-vision="protanopia"] {
+[data-color-vision='protanopia'] {
   --dex-red: #c4a000;
   --dex-green: #56c8ff;
   --dex-accent: #ffd740;
 }
 
 /* === Color vision: Deuteranopia (green-blind) === */
-[data-color-vision="deuteranopia"] {
+[data-color-vision='deuteranopia'] {
   --dex-red: #d4a017;
   --dex-green: #56c8ff;
   --dex-accent: #ffcb47;
 }
 
 /* === Color vision: Tritanopia (blue-blind) === */
-[data-color-vision="tritanopia"] {
+[data-color-vision='tritanopia'] {
   --dex-blue: #ff8a80;
   --dex-green: #47d18c;
   --dex-accent: #ff9e40;
@@ -89,12 +145,11 @@ html {
 
 body {
   margin: 0;
-  font-family: "Pixelify Sans", sans-serif;
+  font-family: 'Pixelify Sans', sans-serif;
   font-optical-sizing: auto;
   background:
     linear-gradient(transparent 31px, var(--dex-cell) 32px),
-    linear-gradient(90deg, transparent 31px, var(--dex-cell) 32px),
-    var(--dex-bg);
+    linear-gradient(90deg, transparent 31px, var(--dex-cell) 32px), var(--dex-bg);
   background-size: 32px 32px;
   color: var(--dex-ink);
 }
@@ -131,12 +186,19 @@ button:disabled {
 
 .dex-brand__mark {
   align-items: center;
-  background: var(--dex-accent);
   color: #1c1721;
   display: inline-flex;
   height: 2rem;
   justify-content: center;
   width: 2rem;
+}
+
+.dex-brand__logo {
+  display: block;
+  height: 1.6rem;
+  image-rendering: pixelated;
+  object-fit: contain;
+  width: 1.6rem;
 }
 
 .pokemon-icon {
@@ -250,7 +312,46 @@ button:disabled {
 
 .dex-search .r8-input__prefix {
   align-items: center;
+  background: transparent;
+  color: var(--dex-muted);
   display: inline-flex;
+}
+
+.dex-search .r8-label {
+  color: var(--dex-ink);
+}
+
+.dex-search .r8-input-shell,
+.dex-search .r8-input-shell:focus-within {
+  background: var(--dex-surface-2);
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
+}
+
+.dex-search .r8-input-shell > .r8-input {
+  background: transparent;
+  color: var(--dex-ink);
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-inline: 0.5rem;
+  width: auto;
+}
+
+.dex-search .r8-input-shell > .r8-input:focus-visible {
+  background: transparent;
+}
+
+.dex-search .r8-input-shell > .r8-input::placeholder {
+  color: var(--dex-muted);
+  opacity: 1;
+}
+
+.dex-search .r8-input__clear,
+.dex-search .r8-input__clear:hover,
+.dex-search .r8-input__clear:active {
+  background: transparent;
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
 }
 
 .generation-strip {
@@ -280,6 +381,67 @@ button:disabled {
   min-width: 0;
 }
 
+.about-page {
+  display: grid;
+  padding-top: clamp(2rem, 6vw, 5rem);
+  place-items: start center;
+}
+
+.about-panel {
+  max-width: 1000px;
+  width: 100%;
+}
+
+.about-panel__header {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.about-panel__header .r8-panel__title {
+  font-size: clamp(2rem, 6vw, 3.75rem);
+  margin-top: 0.35rem;
+}
+
+.about-panel__body {
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1.4fr) minmax(270px, 0.8fr);
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.about-copy,
+.about-author {
+  min-width: 0;
+}
+
+.about-copy h2,
+.about-author h2 {
+  margin: 0 0 0.75rem;
+}
+
+.about-copy p,
+.about-author p {
+  line-height: 1.65;
+}
+
+.about-copy a {
+  color: var(--dex-blue);
+  font-weight: 700;
+}
+
+.about-author {
+  align-self: start;
+  background: var(--dex-surface-2);
+  border: 2px solid var(--dex-line);
+  padding: 1.25rem;
+}
+
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
 .dex-list-header {
   align-items: end;
   display: flex;
@@ -298,14 +460,17 @@ button:disabled {
 .pokemon-grid {
   display: grid;
   gap: 0.85rem;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
 .pokemon-card {
   min-height: 260px;
   overflow: hidden;
   position: relative;
-  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+  transition:
+    transform 120ms ease,
+    border-color 120ms ease,
+    background 120ms ease;
 }
 
 .pokemon-card:hover,
@@ -317,7 +482,7 @@ button:disabled {
 
 .pokemon-card.is-caught::before {
   background: var(--r8-color-success);
-  content: "";
+  content: '';
   height: 0.45rem;
   left: 0;
   position: absolute;
@@ -348,8 +513,7 @@ button:disabled {
   aspect-ratio: 1;
   background:
     linear-gradient(transparent 15px, var(--dex-cell) 16px),
-    linear-gradient(90deg, transparent 15px, var(--dex-cell) 16px),
-    var(--dex-surface-2);
+    linear-gradient(90deg, transparent 15px, var(--dex-cell) 16px), var(--dex-surface-2);
   background-size: 16px 16px;
   display: flex;
   justify-content: center;
@@ -438,8 +602,7 @@ button:disabled {
   aspect-ratio: 1;
   background:
     linear-gradient(transparent 15px, rgba(255, 203, 71, 0.14) 16px),
-    linear-gradient(90deg, transparent 15px, rgba(255, 203, 71, 0.14) 16px),
-    var(--dex-surface-2);
+    linear-gradient(90deg, transparent 15px, rgba(255, 203, 71, 0.14) 16px), var(--dex-surface-2);
   background-size: 16px 16px;
   border: 2px solid var(--dex-line);
   display: flex;
@@ -490,6 +653,17 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+[data-theme='dark'] .pokemon-detail__toolbar .r8-btn--ghost {
+  background-color: var(--dex-surface-2);
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
+  box-shadow: var(--r8-shadow-sm);
+}
+
+[data-theme='dark'] .pokemon-detail__toolbar .r8-btn--ghost:hover {
+  border-color: var(--dex-accent);
 }
 
 .detail-metric-grid {
@@ -684,24 +858,66 @@ button:disabled {
   color: #111116;
 }
 
-.type-chip--normal { background: #c7c0a3; }
-.type-chip--fire { background: #ff7b45; }
-.type-chip--water { background: #58a8ff; }
-.type-chip--electric { background: #ffd84d; }
-.type-chip--grass { background: #73d66b; }
-.type-chip--ice { background: #82e5df; }
-.type-chip--fighting { background: #db5a4d; color: #fffaf0; }
-.type-chip--poison { background: #b869d6; color: #fffaf0; }
-.type-chip--ground { background: #d9b35f; }
-.type-chip--flying { background: #95a6ff; }
-.type-chip--psychic { background: #ff6da8; color: #fffaf0; }
-.type-chip--bug { background: #b6cf4b; }
-.type-chip--rock { background: #b9a15a; }
-.type-chip--ghost { background: #7167b5; color: #fffaf0; }
-.type-chip--dragon { background: #7563f6; color: #fffaf0; }
-.type-chip--dark { background: #6b594f; color: #fffaf0; }
-.type-chip--steel { background: #b9bfd6; }
-.type-chip--fairy { background: #f3a8d8; }
+.type-chip--normal {
+  background: #c7c0a3;
+}
+.type-chip--fire {
+  background: #ff7b45;
+}
+.type-chip--water {
+  background: #58a8ff;
+}
+.type-chip--electric {
+  background: #ffd84d;
+}
+.type-chip--grass {
+  background: #73d66b;
+}
+.type-chip--ice {
+  background: #82e5df;
+}
+.type-chip--fighting {
+  background: #db5a4d;
+  color: #fffaf0;
+}
+.type-chip--poison {
+  background: #b869d6;
+  color: #fffaf0;
+}
+.type-chip--ground {
+  background: #d9b35f;
+}
+.type-chip--flying {
+  background: #95a6ff;
+}
+.type-chip--psychic {
+  background: #ff6da8;
+  color: #fffaf0;
+}
+.type-chip--bug {
+  background: #b6cf4b;
+}
+.type-chip--rock {
+  background: #b9a15a;
+}
+.type-chip--ghost {
+  background: #7167b5;
+  color: #fffaf0;
+}
+.type-chip--dragon {
+  background: #7563f6;
+  color: #fffaf0;
+}
+.type-chip--dark {
+  background: #6b594f;
+  color: #fffaf0;
+}
+.type-chip--steel {
+  background: #b9bfd6;
+}
+.type-chip--fairy {
+  background: #f3a8d8;
+}
 
 @keyframes pulse {
   0%,
@@ -711,6 +927,12 @@ button:disabled {
 
   50% {
     opacity: 1;
+  }
+}
+
+@media (max-width: 1200px) {
+  .pokemon-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -746,12 +968,13 @@ button:disabled {
   .dex-controls__body,
   .detail-metric-grid,
   .detail-list,
+  .about-panel__body,
   .pokemon-detail__hero {
     grid-template-columns: 1fr;
   }
 
   .pokemon-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .dex-list-header {

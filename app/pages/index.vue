@@ -2,8 +2,8 @@
   <main id="pokedex" class="dex-main">
     <section class="dex-hero" aria-labelledby="dex-title">
       <div class="dex-hero__copy">
-        <span class="dex-kicker">National Dex</span>
-        <h1 id="dex-title">Pokedex profissional</h1>
+        <span class="dex-kicker">Personal Dex</span>
+        <h1 id="dex-title">Retrodex pessoal</h1>
         <p>
           Catálogo completo por geração, tipo, captura, favoritos, cadeia evolutiva,
           estatísticas, dano recebido e variantes oficiais da PokeAPI.
@@ -53,56 +53,60 @@
             <input
               v-model.trim="search"
               class="r8-input"
-              type="search"
+              type="text"
+              inputmode="search"
+              enterkeyhint="search"
               placeholder="Nome, número, geração ou região"
+              aria-label="Buscar Pokémon"
               autocomplete="off"
             >
+            <div class="r8-input__actions">
+              <button class="r8-input__clear" type="button" aria-label="Limpar busca" hidden>
+                <X class="pokemon-icon" aria-hidden="true" />
+              </button>
+            </div>
           </div>
         </label>
 
-        <label class="r8-field">
+        <div class="r8-field">
           <span class="r8-label">Geração</span>
-          <select v-model="generationFilter" class="r8-input">
-            <option value="all">Todas</option>
-            <option
-              v-for="generation in bootstrap?.generations"
-              :key="generation.id"
-              :value="String(generation.id)"
-            >
-              {{ generation.label }} · {{ generation.region }}
-            </option>
-          </select>
-        </label>
+          <RetroSelect
+            :model-value="generationFilter"
+            :options="generationOptions"
+            accessible-label="Filtrar por geração"
+            @update:model-value="generationFilter = String($event)"
+          />
+        </div>
 
-        <label class="r8-field">
+        <div class="r8-field">
           <span class="r8-label">Tipo</span>
-          <select v-model="typeFilter" class="r8-input">
-            <option value="all">Todos</option>
-            <option v-for="type in bootstrap?.types" :key="type.name" :value="type.name">
-              {{ type.displayName }}
-            </option>
-          </select>
-        </label>
+          <RetroSelect
+            :model-value="typeFilter"
+            :options="typeOptions"
+            accessible-label="Filtrar por tipo"
+            @update:model-value="typeFilter = String($event)"
+          />
+        </div>
 
-        <label class="r8-field">
+        <div class="r8-field">
           <span class="r8-label">Ordenar</span>
-          <select v-model="sortMode" class="r8-input">
-            <option value="national">National Dex</option>
-            <option value="name">Nome</option>
-            <option value="generation">Geração</option>
-            <option value="captured">Capturados primeiro</option>
-            <option value="favorites">Favoritos primeiro</option>
-          </select>
-        </label>
+          <RetroSelect
+            :model-value="sortMode"
+            :options="sortOptions"
+            accessible-label="Ordenar registros"
+            @update:model-value="updateSortMode"
+          />
+        </div>
 
-        <label class="r8-field">
+        <div class="r8-field">
           <span class="r8-label">Por página</span>
-          <select v-model.number="pageSize" class="r8-input">
-            <option :value="12">12</option>
-            <option :value="24">24</option>
-            <option :value="48">48</option>
-          </select>
-        </label>
+          <RetroSelect
+            :model-value="pageSize"
+            :options="pageSizeOptions"
+            accessible-label="Registros por página"
+            @update:model-value="pageSize = Number($event)"
+          />
+        </div>
       </div>
     </section>
 
@@ -206,11 +210,11 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight, RotateCcw, Search } from '@lucide/vue'
+import { ChevronLeft, ChevronRight, RotateCcw, Search, X } from '@lucide/vue'
 import type { PokedexBootstrap, PokemonEntry } from '../types/pokedex'
 import { fetchPokedexBootstrap } from '../utils/pokeapi-client'
 
-useHead({ title: 'RetroDex Pro — Pokedex' })
+useHead({ title: 'Retrodex' })
 
 const route = useRoute()
 const router = useRouter()
@@ -244,6 +248,36 @@ const favoriteNames = ref<string[]>([])
 const caughtNames = ref<string[]>([])
 const favoriteSet = computed(() => new Set(favoriteNames.value))
 const caughtSet = computed(() => new Set(caughtNames.value))
+
+const generationOptions = computed(() => [
+  { value: 'all', label: 'Todas' },
+  ...(bootstrap.value?.generations ?? []).map((generation) => ({
+    value: String(generation.id),
+    label: `${generation.label} · ${generation.region}`
+  }))
+])
+
+const typeOptions = computed(() => [
+  { value: 'all', label: 'Todos' },
+  ...(bootstrap.value?.types ?? []).map((type) => ({
+    value: type.name,
+    label: type.displayName
+  }))
+])
+
+const sortOptions = [
+  { value: 'national', label: 'National Dex' },
+  { value: 'name', label: 'Nome' },
+  { value: 'generation', label: 'Geração' },
+  { value: 'captured', label: 'Capturados primeiro' },
+  { value: 'favorites', label: 'Favoritos primeiro' }
+]
+
+const pageSizeOptions = [
+  { value: 12, label: '12' },
+  { value: 24, label: '24' },
+  { value: 48, label: '48' }
+]
 
 const selectedTypeSet = computed(() => {
   if (!bootstrap.value || typeFilter.value === 'all') return null
@@ -344,6 +378,10 @@ function resetFilters() {
 
 function retryBootstrap() {
   void refresh()
+}
+
+function updateSortMode(value: string | number) {
+  sortMode.value = String(value) as typeof sortMode.value
 }
 
 function toggleInList(list: string[], value: string): string[] {

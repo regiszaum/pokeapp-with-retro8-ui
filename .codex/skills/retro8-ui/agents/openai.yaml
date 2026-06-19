@@ -1,0 +1,7 @@
+interface:
+  display_name: "Retro8 UI"
+  short_description: "Build interfaces with Retro8 UI semantic classes"
+  default_prompt: "Use $retro8-ui to build or refactor this screen with documented Retro8 UI components and semantic classes."
+
+policy:
+  allow_implicit_invocation: true

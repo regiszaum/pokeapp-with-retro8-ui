@@ -290,7 +290,7 @@ const caughtNames = ref<string[]>([])
 const isFavorite = computed(() => detail.value ? favoriteNames.value.includes(detail.value.speciesName) : false)
 const isCaught = computed(() => detail.value ? caughtNames.value.includes(detail.value.speciesName) : false)
 
-useHead({ title: () => detail.value ? `${detail.value.displayName} — RetroDex Pro` : 'RetroDex Pro' })
+useHead({ title: () => detail.value ? `Retrodex - ${detail.value.displayName}` : 'Retrodex' })
 
 onMounted(async () => {
   favoriteNames.value = readStorageList('retrodex:favorites')

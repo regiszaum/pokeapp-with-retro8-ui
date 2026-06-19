@@ -1,4 +1,4 @@
-# RetroDex Pro
+# RetroDex
 
 Pokedex profissional em Nuxt 4 consumindo a PokeAPI e usando Retro8 UI.
 
