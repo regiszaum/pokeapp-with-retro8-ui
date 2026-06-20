@@ -22,6 +22,33 @@
         </span>
       </div>
 
+      <div class="music-player__volume">
+        <Volume2 class="music-player__volume-icon" :size="18" aria-hidden="true" />
+        <div
+          ref="volumeSlider"
+          class="r8-slider music-player__volume-slider"
+          :data-r8-value="volume"
+          :style="{ '--r8-progress-value': `${volume}%` }"
+        >
+          <div
+            class="r8-slider__track"
+            role="slider"
+            tabindex="0"
+            :aria-label="t('player.volumeAria')"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            :aria-valuenow="volume"
+            :aria-valuetext="`${volume}%`"
+          >
+            <div class="r8-slider__fill" />
+            <div class="r8-slider__thumb" aria-hidden="true" />
+          </div>
+          <span class="r8-text r8-text--muted music-player__volume-output" data-r8-slider-output>
+            {{ t('player.volume') }}: {{ volume }}%
+          </span>
+        </div>
+      </div>
+
       <div class="music-player__controls" role="group" :aria-label="t('player.controls')">
         <button
           class="r8-btn r8-btn--sm r8-btn--secondary music-player__button"
@@ -92,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { Music2, Pause, Play, SkipBack, SkipForward, Square } from '@lucide/vue'
+import { Music2, Pause, Play, SkipBack, SkipForward, Square, Volume2 } from '@lucide/vue'
 import type { MessageKey } from '../i18n/messages'
 import track01 from '~/assets/ogg/01_monster_town_morning_original_8bit.ogg'
 import track02 from '~/assets/ogg/02_wild_grass_encounter_original_8bit.ogg'
@@ -107,6 +134,8 @@ import track10 from '~/assets/ogg/10_pokemon_battle_inspired_original_8bit.ogg'
 import track11 from '~/assets/ogg/11_pokemon_route_inspired_original_8bit.ogg'
 
 type PlaybackState = 'stopped' | 'playing' | 'paused' | 'error'
+
+const DEFAULT_VOLUME = 30
 
 interface Track {
   titleKey: MessageKey
@@ -129,8 +158,10 @@ const tracks: Track[] = [
 
 const { t } = useAppI18n()
 const audioElement = ref<HTMLAudioElement | null>(null)
+const volumeSlider = ref<HTMLElement | null>(null)
 const currentIndex = ref(0)
 const playbackState = ref<PlaybackState>('stopped')
+const volume = ref(DEFAULT_VOLUME)
 
 const currentTrack = computed(() => tracks[currentIndex.value]!)
 const currentTrackTitle = computed(() => t(currentTrack.value.titleKey))
@@ -200,7 +231,32 @@ function handleAudioError() {
   playbackState.value = 'error'
 }
 
+function setVolume(value: number) {
+  const normalized = Math.min(100, Math.max(0, Math.round(value)))
+  volume.value = normalized
+
+  if (audioElement.value) audioElement.value.volume = normalized / 100
+}
+
+function handleVolumeChange(event: Event) {
+  const value = Number((event as CustomEvent<{ value?: number }>).detail?.value)
+  if (Number.isFinite(value)) setVolume(value)
+}
+
+let refreshFrame: number | undefined
+
+onMounted(() => {
+  setVolume(DEFAULT_VOLUME)
+  volumeSlider.value?.addEventListener('r8:slider-change', handleVolumeChange)
+
+  refreshFrame = requestAnimationFrame(() => {
+    if (volumeSlider.value) window.Retro8UI?.refresh?.(volumeSlider.value.parentElement ?? document)
+  })
+})
+
 onBeforeUnmount(() => {
+  if (refreshFrame !== undefined) cancelAnimationFrame(refreshFrame)
+  volumeSlider.value?.removeEventListener('r8:slider-change', handleVolumeChange)
   audioElement.value?.pause()
 })
 </script>
@@ -238,7 +294,7 @@ onBeforeUnmount(() => {
   align-items: center;
   display: grid;
   gap: 0.75rem;
-  grid-template-columns: auto minmax(240px, 1fr) auto;
+  grid-template-columns: auto minmax(240px, 1fr) minmax(9rem, 0.2fr) auto;
   margin: 0 auto;
   max-width: 1500px;
   padding: 0.65rem 1rem;
@@ -347,6 +403,50 @@ onBeforeUnmount(() => {
   gap: 0.4rem;
 }
 
+.music-player__volume {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  min-width: 9rem;
+}
+
+.music-player__volume-icon {
+  color: var(--dex-accent);
+  flex: 0 0 auto;
+}
+
+.music-player__volume-slider {
+  flex: 1;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.music-player__volume .r8-slider__track {
+  background: var(--dex-surface);
+  border-color: var(--dex-line);
+}
+
+.music-player__volume .r8-slider__fill {
+  background: var(--dex-accent);
+}
+
+.music-player__volume .r8-slider__thumb {
+  background: var(--dex-surface-2);
+  border-color: var(--dex-line);
+}
+
+.music-player__volume .r8-slider__track:focus-visible {
+  outline: var(--r8-focus-width) solid var(--r8-color-focus);
+  outline-offset: var(--r8-focus-offset);
+}
+
+.music-player__volume-output {
+  color: var(--dex-muted);
+  font-size: 0.62rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 .music-player__button {
   min-width: 2.375rem;
   padding-inline: 0.65rem;
@@ -364,7 +464,7 @@ onBeforeUnmount(() => {
   }
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1280px) {
   .music-player__identity {
     min-width: auto;
   }
@@ -391,6 +491,11 @@ onBeforeUnmount(() => {
 
   .music-player__controls {
     justify-content: center;
+  }
+
+  .music-player__volume {
+    justify-self: center;
+    width: min(100%, 14rem);
   }
 }
 
