@@ -18,7 +18,7 @@ export default defineNuxtConfig({
         { rel: 'manifest', href: publicAsset('site.webmanifest') },
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap' }
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=DotGothic16&family=Pixelify+Sans:wght@400..700&display=swap' }
       ]
     }
   },

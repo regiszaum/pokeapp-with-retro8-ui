@@ -33,6 +33,11 @@
   --dex-cell: rgba(0, 0, 0, 0.04);
 }
 
+[lang='ja'] {
+  --r8-font-body: 'DotGothic16', sans-serif;
+  --r8-font-display: 'DotGothic16', sans-serif;
+}
+
 /* Override Retro8 components for dark theme */
 [data-theme='dark'] .r8-panel {
   background-color: var(--dex-surface);
@@ -41,19 +46,51 @@
 }
 
 [data-theme='dark'] .dex-controls__header,
-[data-theme='dark'] .about-panel__header {
+[data-theme='dark'] .about-panel__header,
+[data-theme='dark'] .locations-panel__header {
   background-color: var(--dex-surface-2);
   border-color: var(--dex-line);
 }
 
 [data-theme='dark'] .dex-controls__header .r8-panel__title,
-[data-theme='dark'] .about-panel__header .r8-panel__title {
+[data-theme='dark'] .about-panel__header .r8-panel__title,
+[data-theme='dark'] .locations-panel__header .r8-panel__title {
   color: var(--dex-ink);
 }
 
 [data-theme='dark'] .dex-controls__header .r8-panel__meta,
-[data-theme='dark'] .about-panel__header .r8-panel__meta {
+[data-theme='dark'] .about-panel__header .r8-panel__meta,
+[data-theme='dark'] .locations-panel__header .r8-panel__meta {
   color: var(--dex-muted);
+}
+
+[data-theme='dark'] .locations-panel__footer,
+[data-theme='dark'] .locations-page .r8-window__statusbar {
+  background-color: var(--dex-surface-2);
+  border-color: var(--dex-line);
+  color: var(--dex-ink);
+}
+
+[data-theme='dark'] .locations-page .r8-window,
+[data-theme='dark'] .locations-page .r8-table {
+  background-color: var(--dex-surface);
+  color: var(--dex-ink);
+}
+
+[data-theme='dark'] .locations-page .r8-table {
+  --r8-table-header-bg: var(--dex-surface-2);
+  --r8-table-row-bg: var(--dex-surface);
+  --r8-table-row-alt-bg: var(--dex-surface-2);
+  --r8-table-hover-bg: color-mix(in srgb, var(--dex-accent) 12%, var(--dex-surface) 88%);
+}
+
+[data-theme='dark'] .locations-page .r8-table th {
+  background-color: var(--dex-surface-2);
+  border-color: var(--dex-line);
+}
+
+[data-theme='dark'] .locations-page .r8-table td {
+  border-color: var(--dex-line);
 }
 
 [data-theme='dark'] .r8-input,
@@ -145,7 +182,7 @@ html {
 
 body {
   margin: 0;
-  font-family: 'Pixelify Sans', sans-serif;
+  font-family: var(--r8-font-body);
   font-optical-sizing: auto;
   background:
     linear-gradient(transparent 31px, var(--dex-cell) 32px),
@@ -554,11 +591,11 @@ button:disabled {
 
 .dex-detail-panel {
   position: sticky;
-  top: 5rem;
+  top: 8.75rem;
 }
 
 .pokemon-detail {
-  max-height: calc(100vh - 6rem);
+  max-height: calc(100vh - 9.75rem);
 }
 
 .pokemon-detail .r8-window__body {

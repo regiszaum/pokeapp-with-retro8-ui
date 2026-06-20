@@ -1,7 +1,7 @@
 <template>
   <div class="dex-app">
     <header class="dex-topbar">
-      <nav class="r8-navbar" :class="{ 'r8-navbar--dark': themeMode === 'dark' }" data-r8-expand="always" aria-label="Navegação principal da Pokedex">
+      <nav class="r8-navbar" :class="{ 'r8-navbar--dark': themeMode === 'dark' }" data-r8-expand="always" :aria-label="t('nav.label')">
         <div class="r8-navbar__container dex-navbar__container">
           <NuxtLink class="r8-navbar__brand dex-brand" to="/">
             <span class="dex-brand__mark" aria-hidden="true">
@@ -11,15 +11,18 @@
           </NuxtLink>
           <div id="dex-navbar-menu" class="r8-navbar__collapse">
             <ul class="r8-navbar__menu">
-              <li><NuxtLink class="r8-navbar__item" to="/">Pokedex</NuxtLink></li>
-              <li><NuxtLink class="r8-navbar__item" to="/sobre">Sobre</NuxtLink></li>
+              <li><NuxtLink class="r8-navbar__item" to="/">{{ t('nav.pokedex') }}</NuxtLink></li>
+              <li><NuxtLink class="r8-navbar__item" to="/localizacoes">{{ t('nav.locations') }}</NuxtLink></li>
+              <li><NuxtLink class="r8-navbar__item" to="/sobre">{{ t('nav.about') }}</NuxtLink></li>
             </ul>
             <div class="r8-navbar__actions">
+              <LanguageSelector />
               <ThemeSelector />
             </div>
           </div>
         </div>
       </nav>
+      <MusicPlayer />
     </header>
 
     <NuxtPage />
@@ -29,15 +32,17 @@
 <script setup lang="ts">
 import retrodexLogo from '~/assets/png/retrodex.png'
 
-const { mode: themeMode } = useTheme()
+const { mode: themeMode, init: initTheme } = useTheme()
+const { locale, t, init: initLocale } = useAppI18n()
 
-useHead({
+useHead(() => ({
   title: 'Retrodex',
-  meta: [{ name: 'description', content: 'Pokedex profissional em Nuxt 4, Retro8 UI e PokeAPI.' }],
-  htmlAttrs: { 'data-theme': themeMode }
-})
+  meta: [{ name: 'description', content: t('meta.description') }],
+  htmlAttrs: { lang: locale.value, 'data-theme': themeMode.value }
+}))
 
 onMounted(() => {
-  useTheme().init()
+  initTheme()
+  initLocale()
 })
 </script>

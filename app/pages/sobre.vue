@@ -3,36 +3,30 @@
     <section class="r8-panel about-panel" aria-labelledby="about-title">
       <header class="r8-panel__header about-panel__header">
         <div>
-          <span class="dex-kicker">Sobre o projeto</span>
+          <span class="dex-kicker">{{ t('about.kicker') }}</span>
           <h1 id="about-title" class="r8-panel__title">Retrodex</h1>
-          <p class="r8-panel__meta">Uma demonstração prática da Retro8 UI.</p>
+          <p class="r8-panel__meta">{{ t('about.tagline') }}</p>
         </div>
       </header>
 
       <div class="r8-panel__body about-panel__body">
         <div class="about-copy">
-          <h2>Objetivo</h2>
+          <h2>{{ t('about.goal') }}</h2>
           <p>
-            O Retrodex foi criado para demonstrar, em uma aplicação funcional, a utilização da
+            {{ t('about.goalBeforeLink') }}
             <a
               href="https://regiszaum.github.io/retro8-ui/en"
               target="_blank"
               rel="noopener noreferrer"
-            >Retro8 UI</a>, uma biblioteca de interfaces com estética retrô 8-bit e classes semânticas.
+            >Retro8 UI</a>{{ t('about.goalAfterLink') }}
           </p>
-          <p>
-            Construído com Nuxt e integrado à PokeAPI, o projeto apresenta componentes, temas,
-            responsividade, filtros e comportamentos interativos da biblioteca em um produto coeso,
-            acessível e preparado para diferentes tamanhos de tela.
-          </p>
+          <p>{{ t('about.description') }}</p>
         </div>
 
         <aside class="about-author" aria-labelledby="author-title">
-          <span class="dex-kicker">Autoria</span>
+          <span class="dex-kicker">{{ t('about.authorship') }}</span>
           <h2 id="author-title">Régis Adriano</h2>
-          <p>
-            Frontend Engineer. Conheça outros projetos e acesse os canais profissionais pelos links abaixo.
-          </p>
+          <p>{{ t('about.authorDescription') }}</p>
           <div class="about-actions">
             <a
               class="r8-btn r8-btn--primary"
@@ -54,13 +48,15 @@
 </template>
 
 <script setup lang="ts">
-useHead({
-  title: 'Retrodex - Sobre',
+const { t } = useAppI18n()
+
+useHead(() => ({
+  title: `Retrodex - ${t('nav.about')}`,
   meta: [
     {
       name: 'description',
-      content: 'Conheça o Retrodex, projeto criado para demonstrar a utilização da Retro8 UI com Nuxt.'
+      content: t('about.metaDescription')
     }
   ]
-})
+}))
 </script>

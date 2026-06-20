@@ -6,7 +6,7 @@
     <button
       class="pokemon-card__select"
       type="button"
-      :aria-label="`Abrir detalhes de ${pokemon.displayName}`"
+      :aria-label="t('card.open', { name: pokemon.displayName })"
       :aria-pressed="selected"
       @click="$emit('select', pokemon.name)"
     >
@@ -28,7 +28,7 @@
         class="r8-btn r8-btn--sm pokemon-icon-btn"
         :class="favorite ? 'r8-btn--danger' : 'r8-btn--secondary'"
         type="button"
-        :aria-label="favorite ? `Remover ${pokemon.displayName} dos favoritos` : `Favoritar ${pokemon.displayName}`"
+        :aria-label="favorite ? t('card.removeFavoriteFor', { name: pokemon.displayName }) : t('card.addFavoriteFor', { name: pokemon.displayName })"
         data-r8-toggle="tooltip"
         :data-r8-target="`#tip-fav-${pokemon.name}`"
         @click="$emit('toggleFavorite', pokemon.name)"
@@ -36,14 +36,14 @@
         <Heart class="pokemon-icon" aria-hidden="true" :fill="favorite ? 'currentColor' : 'none'" />
       </button>
       <div :id="`tip-fav-${pokemon.name}`" class="r8-poptip" data-r8-variant="hint" hidden>
-        {{ favorite ? 'Remover favorito' : 'Favoritar' }}
+        {{ favorite ? t('card.removeFavorite') : t('card.favorite') }}
       </div>
 
       <button
         class="r8-btn r8-btn--sm pokemon-icon-btn"
         :class="caught ? 'r8-btn--success' : 'r8-btn--secondary'"
         type="button"
-        :aria-label="caught ? `Marcar ${pokemon.displayName} como não capturado` : `Marcar ${pokemon.displayName} como capturado`"
+        :aria-label="caught ? t('card.markNotCaught', { name: pokemon.displayName }) : t('card.markCaught', { name: pokemon.displayName })"
         data-r8-toggle="tooltip"
         :data-r8-target="`#tip-caught-${pokemon.name}`"
         @click="$emit('toggleCaught', pokemon.name)"
@@ -51,7 +51,7 @@
         <Check class="pokemon-icon" aria-hidden="true" />
       </button>
       <div :id="`tip-caught-${pokemon.name}`" class="r8-poptip" data-r8-variant="hint" hidden>
-        {{ caught ? 'Capturado' : 'Marcar capturado' }}
+        {{ caught ? t('card.caught') : t('card.markCaughtShort') }}
       </div>
     </div>
   </article>
@@ -60,6 +60,8 @@
 <script setup lang="ts">
 import { Check, Heart } from '@lucide/vue'
 import type { PokemonEntry } from '../types/pokedex'
+
+const { t } = useAppI18n()
 
 defineProps<{
   pokemon: PokemonEntry

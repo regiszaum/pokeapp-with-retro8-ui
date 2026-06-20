@@ -3,8 +3,8 @@
     <button
       class="r8-btn r8-btn--sm r8-btn--secondary theme-selector__toggle"
       type="button"
-      aria-label="Alternar tema claro/escuro"
-      :title="mode === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro'"
+      :aria-label="t('theme.toggle')"
+      :title="mode === 'dark' ? t('theme.toLight') : t('theme.toDark')"
       @click="setMode(mode === 'dark' ? 'light' : 'dark')"
     >
       <Sun v-if="mode === 'dark'" class="pokemon-icon" aria-hidden="true" />
@@ -14,7 +14,7 @@
       class="theme-selector__select"
       :model-value="colorVision"
       :options="colorVisionOptions"
-      accessible-label="Modo de visão de cor"
+      :accessible-label="t('theme.colorVision')"
       compact
       @update:model-value="updateColorVision"
     />
@@ -26,13 +26,14 @@ import { Moon, Sun } from '@lucide/vue'
 import type { ColorVision } from '../composables/useTheme'
 
 const { mode, colorVision, setMode, setColorVision } = useTheme()
+const { t } = useAppI18n()
 
-const colorVisionOptions = [
-  { value: 'normal', label: '👁 Normal' },
+const colorVisionOptions = computed(() => [
+  { value: 'normal', label: t('theme.normal') },
   { value: 'protanopia', label: 'Protanopia' },
   { value: 'deuteranopia', label: 'Deuteranopia' },
   { value: 'tritanopia', label: 'Tritanopia' }
-]
+])
 
 function updateColorVision(value: string | number) {
   setColorVision(String(value) as ColorVision)

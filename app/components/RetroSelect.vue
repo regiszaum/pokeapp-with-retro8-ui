@@ -7,7 +7,7 @@
     :data-r8-value="String(modelValue)"
   >
     <button class="r8-select__trigger" type="button" :aria-label="accessibleLabel">
-      <span data-r8-choice-display>{{ selectedOption?.label ?? placeholder }}</span>
+      <span data-r8-choice-display>{{ selectedOption?.label ?? placeholder ?? t('common.select') }}</span>
       <span class="r8-choice__caret" aria-hidden="true">&gt;</span>
     </button>
 
@@ -43,9 +43,10 @@ const props = withDefaults(defineProps<{
   placeholder?: string
   compact?: boolean
 }>(), {
-  placeholder: 'Selecione',
   compact: false
 })
+
+const { t } = useAppI18n()
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
@@ -76,7 +77,7 @@ function handleChoiceChange(event: Event): void {
 
 function syncDisplay(element = root.value): void {
   const display = element?.querySelector<HTMLElement>('[data-r8-choice-display]')
-  if (display) display.textContent = selectedOption.value?.label ?? props.placeholder
+  if (display) display.textContent = selectedOption.value?.label ?? props.placeholder ?? t('common.select')
 }
 
 watch(root, (current, previous) => {

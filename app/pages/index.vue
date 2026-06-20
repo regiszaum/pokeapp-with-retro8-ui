@@ -2,50 +2,47 @@
   <main id="pokedex" class="dex-main">
     <section class="dex-hero" aria-labelledby="dex-title">
       <div class="dex-hero__copy">
-        <span class="dex-kicker">Personal Dex</span>
-        <h1 id="dex-title">Retrodex pessoal</h1>
-        <p>
-          Catálogo completo por geração, tipo, captura, favoritos, cadeia evolutiva,
-          estatísticas, dano recebido e variantes oficiais da PokeAPI.
-        </p>
+        <span class="dex-kicker">{{ t('home.kicker') }}</span>
+        <h1 id="dex-title">{{ t('home.heading') }}</h1>
+        <p>{{ t('home.intro') }}</p>
       </div>
-      <div class="dex-hero__stats" aria-label="Resumo da Pokedex">
+      <div class="dex-hero__stats" :aria-label="t('home.summary')">
         <div class="dex-stat">
-          <span>Espécies</span>
+          <span>{{ t('home.species') }}</span>
           <strong>{{ bootstrap?.totalSpecies ?? '...' }}</strong>
         </div>
         <div class="dex-stat">
-          <span>Gerações</span>
+          <span>{{ t('home.generations') }}</span>
           <strong>{{ bootstrap?.generations.length ?? '...' }}</strong>
         </div>
         <div class="dex-stat">
-          <span>Capturados</span>
+          <span>{{ t('home.caught') }}</span>
           <strong>{{ caughtNames.length }}</strong>
         </div>
         <div class="dex-stat">
-          <span>Favoritos</span>
+          <span>{{ t('home.favorites') }}</span>
           <strong>{{ favoriteNames.length }}</strong>
         </div>
       </div>
     </section>
 
-    <section class="r8-panel dex-controls" aria-label="Filtros da Pokedex">
+    <section class="r8-panel dex-controls" :aria-label="t('home.filtersLabel')">
       <div class="r8-panel__header dex-controls__header">
         <div>
-          <h2 class="r8-panel__title">Filtros</h2>
+          <h2 class="r8-panel__title">{{ t('home.filters') }}</h2>
           <p class="r8-panel__meta">
-            {{ filteredPokemon.length }} registros encontrados
+            {{ t('home.results', { count: filteredPokemon.length }) }}
           </p>
         </div>
         <button class="r8-btn r8-btn--sm r8-btn--secondary" type="button" @click="resetFilters">
           <RotateCcw class="pokemon-icon" aria-hidden="true" />
-          Limpar
+          {{ t('home.clear') }}
         </button>
       </div>
 
       <div class="r8-panel__body dex-controls__body">
         <label class="r8-field dex-search">
-          <span class="r8-label">Busca</span>
+          <span class="r8-label">{{ t('home.search') }}</span>
           <div class="r8-input-shell" data-r8-clearable="true">
             <span class="r8-input__prefix">
               <Search class="pokemon-icon" aria-hidden="true" />
@@ -56,12 +53,12 @@
               type="text"
               inputmode="search"
               enterkeyhint="search"
-              placeholder="Nome, número, geração ou região"
-              aria-label="Buscar Pokémon"
+              :placeholder="t('home.searchPlaceholder')"
+              :aria-label="t('home.searchAria')"
               autocomplete="off"
             >
             <div class="r8-input__actions">
-              <button class="r8-input__clear" type="button" aria-label="Limpar busca" hidden>
+              <button class="r8-input__clear" type="button" :aria-label="t('home.clearSearch')" hidden>
                 <X class="pokemon-icon" aria-hidden="true" />
               </button>
             </div>
@@ -69,55 +66,55 @@
         </label>
 
         <div class="r8-field">
-          <span class="r8-label">Geração</span>
+          <span class="r8-label">{{ t('home.generation') }}</span>
           <RetroSelect
             :model-value="generationFilter"
             :options="generationOptions"
-            accessible-label="Filtrar por geração"
+            :accessible-label="t('home.generationFilterAria')"
             @update:model-value="generationFilter = String($event)"
           />
         </div>
 
         <div class="r8-field">
-          <span class="r8-label">Tipo</span>
+          <span class="r8-label">{{ t('home.type') }}</span>
           <RetroSelect
             :model-value="typeFilter"
             :options="typeOptions"
-            accessible-label="Filtrar por tipo"
+            :accessible-label="t('home.typeFilterAria')"
             @update:model-value="typeFilter = String($event)"
           />
         </div>
 
         <div class="r8-field">
-          <span class="r8-label">Ordenar</span>
+          <span class="r8-label">{{ t('home.sort') }}</span>
           <RetroSelect
             :model-value="sortMode"
             :options="sortOptions"
-            accessible-label="Ordenar registros"
+            :accessible-label="t('home.sortAria')"
             @update:model-value="updateSortMode"
           />
         </div>
 
         <div class="r8-field">
-          <span class="r8-label">Por página</span>
+          <span class="r8-label">{{ t('home.perPage') }}</span>
           <RetroSelect
             :model-value="pageSize"
             :options="pageSizeOptions"
-            accessible-label="Registros por página"
+            :accessible-label="t('home.pageSizeAria')"
             @update:model-value="pageSize = Number($event)"
           />
         </div>
       </div>
     </section>
 
-    <section id="generations" class="generation-strip" aria-label="Atalhos por geração">
+    <section id="generations" class="generation-strip" :aria-label="t('home.generationShortcuts')">
       <button
         class="r8-btn r8-btn--sm"
         :class="generationFilter === 'all' ? 'r8-btn--primary' : 'r8-btn--secondary'"
         type="button"
         @click="generationFilter = 'all'"
       >
-        Todas
+        {{ t('home.allFeminine') }}
       </button>
       <button
         v-for="generation in bootstrap?.generations"
@@ -135,14 +132,14 @@
     <section class="dex-list-section" aria-labelledby="list-title">
       <div class="dex-list-header">
         <div>
-          <span class="dex-kicker">Box</span>
-          <h2 id="list-title">Registros</h2>
+          <span class="dex-kicker">{{ t('home.box') }}</span>
+          <h2 id="list-title">{{ t('home.records') }}</h2>
         </div>
         <div class="dex-pagination">
           <button
             class="r8-btn r8-btn--sm r8-btn--secondary pokemon-icon-btn"
             type="button"
-            aria-label="Página anterior"
+            :aria-label="t('home.previousPage')"
             :disabled="page <= 1"
             @click="page -= 1"
           >
@@ -152,7 +149,7 @@
           <button
             class="r8-btn r8-btn--sm r8-btn--secondary pokemon-icon-btn"
             type="button"
-            aria-label="Próxima página"
+            :aria-label="t('home.nextPage')"
             :disabled="page >= totalPages"
             @click="page += 1"
           >
@@ -176,10 +173,10 @@
 
       <div v-else-if="error" class="r8-panel dex-error">
         <div class="r8-panel__body">
-          <strong>Não foi possível carregar a PokeAPI.</strong>
+          <strong>{{ t('home.apiError') }}</strong>
           <p>{{ error.message }}</p>
           <button class="r8-btn r8-btn--primary" type="button" @click="retryBootstrap">
-            Tentar novamente
+            {{ t('home.retry') }}
           </button>
         </div>
       </div>
@@ -201,8 +198,8 @@
       <div v-else class="r8-panel dex-empty">
         <div class="r8-panel__body">
           <Search class="dex-empty__icon" aria-hidden="true" />
-          <strong>Nenhum registro encontrado.</strong>
-          <p>Ajuste busca, tipo ou geração para continuar explorando.</p>
+          <strong>{{ t('home.emptyTitle') }}</strong>
+          <p>{{ t('home.emptyText') }}</p>
         </div>
       </div>
     </section>
@@ -214,12 +211,18 @@ import { ChevronLeft, ChevronRight, RotateCcw, Search, X } from '@lucide/vue'
 import type { PokedexBootstrap, PokemonEntry } from '../types/pokedex'
 import { fetchPokedexBootstrap } from '../utils/pokeapi-client'
 
-useHead({ title: 'Retrodex' })
+const { locale, t } = useAppI18n()
+
+useHead(() => ({
+  title: 'Retrodex',
+  meta: [{ name: 'description', content: t('home.metaDescription') }]
+}))
 
 const route = useRoute()
 const router = useRouter()
 
 const emptyBootstrap: PokedexBootstrap = {
+  locale: locale.value,
   generatedAt: '',
   totalSpecies: 0,
   generations: [],
@@ -230,9 +233,11 @@ const emptyBootstrap: PokedexBootstrap = {
 
 const { data: bootstrap, pending, error, refresh } = await useAsyncData<PokedexBootstrap>(
   'pokedex-bootstrap',
-  fetchPokedexBootstrap,
+  () => fetchPokedexBootstrap(locale.value),
   { default: () => emptyBootstrap, server: false }
 )
+
+watch(locale, () => void refresh())
 
 // Query params sync
 const search = ref(String(route.query.q ?? ''))
@@ -250,7 +255,7 @@ const favoriteSet = computed(() => new Set(favoriteNames.value))
 const caughtSet = computed(() => new Set(caughtNames.value))
 
 const generationOptions = computed(() => [
-  { value: 'all', label: 'Todas' },
+  { value: 'all', label: t('home.allFeminine') },
   ...(bootstrap.value?.generations ?? []).map((generation) => ({
     value: String(generation.id),
     label: `${generation.label} · ${generation.region}`
@@ -258,20 +263,20 @@ const generationOptions = computed(() => [
 ])
 
 const typeOptions = computed(() => [
-  { value: 'all', label: 'Todos' },
+  { value: 'all', label: t('home.allMasculine') },
   ...(bootstrap.value?.types ?? []).map((type) => ({
     value: type.name,
     label: type.displayName
   }))
 ])
 
-const sortOptions = [
-  { value: 'national', label: 'National Dex' },
-  { value: 'name', label: 'Nome' },
-  { value: 'generation', label: 'Geração' },
-  { value: 'captured', label: 'Capturados primeiro' },
-  { value: 'favorites', label: 'Favoritos primeiro' }
-]
+const sortOptions = computed(() => [
+  { value: 'national', label: t('sort.national') },
+  { value: 'name', label: t('sort.name') },
+  { value: 'generation', label: t('sort.generation') },
+  { value: 'captured', label: t('sort.captured') },
+  { value: 'favorites', label: t('sort.favorites') }
+])
 
 const pageSizeOptions = [
   { value: 12, label: '12' },
@@ -285,7 +290,7 @@ const selectedTypeSet = computed(() => {
 })
 
 const filteredPokemon = computed(() => {
-  const query = search.value.toLowerCase()
+  const query = search.value.toLocaleLowerCase(locale.value)
   const typeSet = selectedTypeSet.value
 
   const filtered = (bootstrap.value?.pokemon ?? []).filter((pokemon) => {
@@ -295,11 +300,11 @@ const filteredPokemon = computed(() => {
     const matchesQuery =
       !query ||
       pokemon.name.includes(query) ||
-      pokemon.displayName.toLowerCase().includes(query) ||
+      pokemon.displayName.toLocaleLowerCase(locale.value).includes(query) ||
       pokemon.id.toString() === query ||
       pokemon.id.toString().padStart(4, '0').includes(query) ||
-      pokemon.generationLabel.toLowerCase().includes(query) ||
-      pokemon.region.toLowerCase().includes(query)
+      pokemon.generationLabel.toLocaleLowerCase(locale.value).includes(query) ||
+      pokemon.region.toLocaleLowerCase(locale.value).includes(query)
     return matchesGeneration && matchesType && matchesQuery
   })
 
@@ -343,7 +348,7 @@ watch(caughtNames, (v) => writeStorageList('retrodex:caught', v), { deep: true }
 
 function sortPokemon(pokemon: PokemonEntry[]): PokemonEntry[] {
   return [...pokemon].sort((a, b) => {
-    if (sortMode.value === 'name') return a.displayName.localeCompare(b.displayName)
+    if (sortMode.value === 'name') return a.displayName.localeCompare(b.displayName, locale.value)
     if (sortMode.value === 'generation') return a.generationId - b.generationId || a.id - b.id
     if (sortMode.value === 'captured') {
       return Number(caughtSet.value.has(b.name)) - Number(caughtSet.value.has(a.name)) || a.id - b.id

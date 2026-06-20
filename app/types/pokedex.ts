@@ -27,6 +27,7 @@ export interface PokemonEntry {
 }
 
 export interface PokedexBootstrap {
+  locale: AppLocale
   generatedAt: string
   totalSpecies: number
   generations: GenerationSummary[]
@@ -74,7 +75,10 @@ export interface PokemonDetail {
   name: string
   displayName: string
   speciesName: string
-  types: string[]
+  types: {
+    name: string
+    displayName: string
+  }[]
   height: number
   weight: number
   baseExperience: number | null
@@ -117,3 +121,4 @@ export interface PokemonDetail {
     immunities: DamageRelation[]
   }
 }
+import type { AppLocale } from '../i18n/config'
