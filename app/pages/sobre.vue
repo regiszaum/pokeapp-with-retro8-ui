@@ -25,7 +25,20 @@
 
         <aside class="about-author" aria-labelledby="author-title">
           <span class="dex-kicker">{{ t('about.authorship') }}</span>
-          <h2 id="author-title">Régis Adriano</h2>
+          <div class="about-author__identity">
+            <span
+              class="r8-avatar r8-avatar--lg r8-avatar--round"
+              data-r8-avatar-fallback="RA"
+            >
+              <img
+                src="https://avatars.githubusercontent.com/u/67252983?v=4"
+                :alt="t('about.authorAvatarAlt')"
+                width="64"
+                height="64"
+              >
+            </span>
+            <h2 id="author-title">Régis Adriano</h2>
+          </div>
           <p>{{ t('about.authorDescription') }}</p>
           <div class="about-actions">
             <a
@@ -33,13 +46,28 @@
               href="https://github.com/regiszaum"
               target="_blank"
               rel="noopener noreferrer"
-            >GitHub</a>
+            >
+              <PixelIcon class="r8-btn__icon" name="user" />
+              GitHub
+            </a>
+            <a
+              class="r8-btn r8-btn--secondary"
+              href="https://github.com/regiszaum/pokeapp-with-retro8-ui"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <PixelIcon class="r8-btn__icon" name="git-branch" />
+              {{ t('about.repository') }}
+            </a>
             <a
               class="r8-btn r8-btn--secondary"
               href="https://www.linkedin.com/in/regisadrianofilho/"
               target="_blank"
               rel="noopener noreferrer"
-            >LinkedIn</a>
+            >
+              <PixelIcon class="r8-btn__icon" name="briefcase" />
+              LinkedIn
+            </a>
           </div>
         </aside>
       </div>

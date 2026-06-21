@@ -35,7 +35,7 @@
           </p>
         </div>
         <button class="r8-btn r8-btn--sm r8-btn--secondary" type="button" @click="resetFilters">
-          <RotateCcw class="pokemon-icon" aria-hidden="true" />
+          <PixelIcon class="pokemon-icon" name="reload" />
           {{ t('home.clear') }}
         </button>
       </div>
@@ -45,7 +45,7 @@
           <span class="r8-label">{{ t('home.search') }}</span>
           <div class="r8-input-shell" data-r8-clearable="true">
             <span class="r8-input__prefix">
-              <Search class="pokemon-icon" aria-hidden="true" />
+              <PixelIcon class="pokemon-icon" name="search" />
             </span>
             <input
               v-model.trim="search"
@@ -59,7 +59,7 @@
             >
             <div class="r8-input__actions">
               <button class="r8-input__clear" type="button" :aria-label="t('home.clearSearch')" hidden>
-                <X class="pokemon-icon" aria-hidden="true" />
+                <PixelIcon class="pokemon-icon" name="close" :size="12" />
               </button>
             </div>
           </div>
@@ -143,7 +143,7 @@
             :disabled="page <= 1"
             @click="page -= 1"
           >
-            <ChevronLeft class="pokemon-icon" aria-hidden="true" />
+            <PixelIcon class="pokemon-icon" name="chevron-left" />
           </button>
           <span>{{ page }} / {{ totalPages }}</span>
           <button
@@ -153,7 +153,7 @@
             :disabled="page >= totalPages"
             @click="page += 1"
           >
-            <ChevronRight class="pokemon-icon" aria-hidden="true" />
+            <PixelIcon class="pokemon-icon" name="chevron-right" />
           </button>
         </div>
       </div>
@@ -197,7 +197,7 @@
 
       <div v-else class="r8-panel dex-empty">
         <div class="r8-panel__body">
-          <Search class="dex-empty__icon" aria-hidden="true" />
+          <PixelIcon class="dex-empty__icon" name="search" :size="48" />
           <strong>{{ t('home.emptyTitle') }}</strong>
           <p>{{ t('home.emptyText') }}</p>
         </div>
@@ -207,7 +207,6 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronLeft, ChevronRight, RotateCcw, Search, X } from '@lucide/vue'
 import type { PokedexBootstrap, PokemonEntry } from '../types/pokedex'
 import { fetchPokedexBootstrap } from '../utils/pokeapi-client'
 

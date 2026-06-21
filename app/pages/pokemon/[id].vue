@@ -2,7 +2,7 @@
   <main class="dex-main">
     <div class="pokemon-detail-page">
       <NuxtLink to="/" class="r8-btn r8-btn--sm r8-btn--secondary pokemon-detail-page__back">
-        <ArrowLeft class="pokemon-icon" aria-hidden="true" />
+        <PixelIcon class="pokemon-icon" name="arrow-left" />
         {{ t('detail.back') }}
       </NuxtLink>
 
@@ -89,7 +89,7 @@
             type="button"
             @click="shiny = !shiny"
           >
-            <Sparkles class="pokemon-icon" aria-hidden="true" />
+            <PixelIcon class="pokemon-icon" name="sparkles" />
             {{ t('detail.shiny') }}
           </button>
           <button
@@ -98,7 +98,7 @@
             type="button"
             @click="playCry(detail.cries.latest)"
           >
-            <Volume2 class="pokemon-icon" aria-hidden="true" />
+            <PixelIcon class="pokemon-icon" name="volume" />
             {{ t('detail.cry') }}
           </button>
           <button
@@ -107,7 +107,7 @@
             type="button"
             @click="toggleFavorite"
           >
-            <Heart class="pokemon-icon" aria-hidden="true" :fill="isFavorite ? 'currentColor' : 'none'" />
+            <PixelIcon class="pokemon-icon" name="heart" />
             {{ isFavorite ? t('detail.favorited') : t('detail.favorite') }}
           </button>
           <button
@@ -116,7 +116,7 @@
             type="button"
             @click="toggleCaught"
           >
-            <Check class="pokemon-icon" aria-hidden="true" />
+            <PixelIcon class="pokemon-icon" name="check" />
             {{ isCaught ? t('detail.caught') : t('detail.captureAction') }}
           </button>
         </div>
@@ -278,7 +278,6 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeft, Check, Heart, Sparkles, Volume2 } from '@lucide/vue'
 import type { PokemonDetail } from '../../types/pokedex'
 import { fetchPokemonDetail } from '../../utils/pokeapi-client'
 

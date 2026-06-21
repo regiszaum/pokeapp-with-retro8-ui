@@ -2,7 +2,7 @@
   <section class="r8-panel r8-panel--muted music-player" :aria-label="t('player.label')">
     <div class="r8-panel__body music-player__body">
       <div class="music-player__identity" aria-hidden="true">
-        <Music2 class="music-player__identity-icon" :size="20" :stroke-width="2.5" />
+        <PixelIcon class="music-player__identity-icon" name="music" />
         <span class="music-player__identity-copy">
           <strong>Retro Radio</strong>
           <small>{{ t('player.trackCount', { current: currentIndex + 1, total: tracks.length }) }}</small>
@@ -23,7 +23,7 @@
       </div>
 
       <div class="music-player__volume">
-        <Volume2 class="music-player__volume-icon" :size="18" aria-hidden="true" />
+        <PixelIcon class="music-player__volume-icon" name="volume" />
         <div
           ref="volumeSlider"
           class="r8-slider music-player__volume-slider"
@@ -57,7 +57,7 @@
           :title="t('player.previousAria')"
           @click="previousTrack"
         >
-          <SkipBack class="r8-btn__icon" :size="18" aria-hidden="true" />
+          <PixelIcon class="r8-btn__icon" name="previous" />
           <span class="music-player__button-label">{{ t('player.previous') }}</span>
         </button>
         <button
@@ -69,7 +69,7 @@
           :title="t('player.playAria')"
           @click="play"
         >
-          <Play class="r8-btn__icon" :size="18" aria-hidden="true" />
+          <PixelIcon class="r8-btn__icon" name="play" />
           <span class="music-player__button-label">{{ t('player.play') }}</span>
         </button>
         <button
@@ -80,7 +80,7 @@
           :title="t('player.pauseAria')"
           @click="pause"
         >
-          <Pause class="r8-btn__icon" :size="18" aria-hidden="true" />
+          <PixelIcon class="r8-btn__icon" name="pause" />
           <span class="music-player__button-label">{{ t('player.pause') }}</span>
         </button>
         <button
@@ -91,7 +91,7 @@
           :title="t('player.stopAria')"
           @click="stop"
         >
-          <Square class="r8-btn__icon" :size="16" aria-hidden="true" />
+          <PixelIcon class="r8-btn__icon" name="stop" />
           <span class="music-player__button-label">{{ t('player.stop') }}</span>
         </button>
         <button
@@ -101,7 +101,7 @@
           :title="t('player.nextAria')"
           @click="nextTrack"
         >
-          <SkipForward class="r8-btn__icon" :size="18" aria-hidden="true" />
+          <PixelIcon class="r8-btn__icon" name="next" />
           <span class="music-player__button-label">{{ t('player.next') }}</span>
         </button>
       </div>
@@ -119,7 +119,6 @@
 </template>
 
 <script setup lang="ts">
-import { Music2, Pause, Play, SkipBack, SkipForward, Square, Volume2 } from '@lucide/vue'
 import type { MessageKey } from '../i18n/messages'
 import track01 from '~/assets/ogg/01_monster_town_morning_original_8bit.ogg'
 import track02 from '~/assets/ogg/02_wild_grass_encounter_original_8bit.ogg'

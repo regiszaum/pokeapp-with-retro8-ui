@@ -7,8 +7,8 @@
       :title="mode === 'dark' ? t('theme.toLight') : t('theme.toDark')"
       @click="setMode(mode === 'dark' ? 'light' : 'dark')"
     >
-      <Sun v-if="mode === 'dark'" class="pokemon-icon" aria-hidden="true" />
-      <Moon v-else class="pokemon-icon" aria-hidden="true" />
+      <PixelIcon v-if="mode === 'dark'" class="pokemon-icon" name="sun" />
+      <PixelIcon v-else class="pokemon-icon" name="moon" />
     </button>
     <RetroSelect
       class="theme-selector__select"
@@ -22,7 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun } from '@lucide/vue'
 import type { ColorVision } from '../composables/useTheme'
 
 const { mode, colorVision, setMode, setColorVision } = useTheme()

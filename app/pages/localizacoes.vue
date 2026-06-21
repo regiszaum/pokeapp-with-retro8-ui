@@ -6,7 +6,7 @@
       </div>
       <div class="r8-window__body locations-hero__body">
         <div class="locations-hero__copy">
-          <MapPinned class="locations-hero__icon" :size="34" aria-hidden="true" />
+          <PixelIcon class="locations-hero__icon" name="map-pin-home" :size="48" />
           <div>
             <h1 id="locations-title">{{ t('locations.title') }}</h1>
             <p>{{ t('locations.intro') }}</p>
@@ -70,7 +70,7 @@
         <label class="r8-field locations-search">
           <span class="r8-label">{{ t('locations.search') }}</span>
           <div class="r8-input-shell">
-            <span class="r8-input__prefix"><Search :size="16" aria-hidden="true" /></span>
+            <span class="r8-input__prefix"><PixelIcon name="search" /></span>
             <input
               v-model.trim="encounterSearch"
               class="r8-input"
@@ -85,7 +85,7 @@
                 :aria-label="t('locations.clearSearch')"
                 @click="encounterSearch = ''"
               >
-                <X :size="15" aria-hidden="true" />
+                <PixelIcon name="close" :size="12" />
               </button>
             </div>
           </div>
@@ -102,7 +102,7 @@
 
     <div v-else-if="error" class="r8-panel locations-feedback">
       <div class="r8-panel__body">
-        <MapPinOff :size="34" aria-hidden="true" />
+        <PixelIcon name="map-pin" :size="48" />
         <strong>{{ t('locations.error') }}</strong>
         <button class="r8-btn r8-btn--primary" type="button" @click="refresh">
           {{ t('locations.retry') }}
@@ -195,7 +195,7 @@
           </section>
 
           <div v-if="!locationDetail.areas.length" class="locations-empty">
-            <MapPinOff :size="30" aria-hidden="true" />
+            <PixelIcon name="map-pin" :size="48" />
             <p>{{ t('locations.noAreas') }}</p>
           </div>
 
@@ -243,7 +243,7 @@
                     :disabled="encounterPage <= 1"
                     @click="encounterPage -= 1"
                   >
-                    <ChevronLeft :size="17" aria-hidden="true" />
+                    <PixelIcon name="chevron-left" />
                   </button>
                   <span>{{ t('locations.pageStatus', { current: encounterPage, total: encounterTotalPages }) }}</span>
                   <button
@@ -253,7 +253,7 @@
                     :disabled="encounterPage >= encounterTotalPages"
                     @click="encounterPage += 1"
                   >
-                    <ChevronRight :size="17" aria-hidden="true" />
+                    <PixelIcon name="chevron-right" />
                   </button>
                 </div>
               </div>
@@ -301,7 +301,7 @@
                 </table>
               </div>
               <div v-else class="locations-empty">
-                <Search :size="30" aria-hidden="true" />
+                <PixelIcon name="search" :size="48" />
                 <p>{{ t('locations.noEncounters') }}</p>
               </div>
             </section>
@@ -309,7 +309,7 @@
         </div>
 
         <div v-else class="r8-window__body locations-empty">
-          <MapPin :size="30" aria-hidden="true" />
+          <PixelIcon name="map-pin" :size="48" />
           <p>{{ t('locations.selectLocation') }}</p>
         </div>
         <div class="r8-window__statusbar">
@@ -351,7 +351,7 @@
               :disabled="palParkPage <= 1"
               @click="palParkPage -= 1"
             >
-              <ChevronLeft :size="17" aria-hidden="true" />
+              <PixelIcon name="chevron-left" />
             </button>
             <span>{{ t('locations.pageStatus', { current: palParkPage, total: palParkTotalPages }) }}</span>
             <button
@@ -361,7 +361,7 @@
               :disabled="palParkPage >= palParkTotalPages"
               @click="palParkPage += 1"
             >
-              <ChevronRight :size="17" aria-hidden="true" />
+              <PixelIcon name="chevron-right" />
             </button>
           </div>
         </div>
@@ -402,15 +402,6 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ChevronLeft,
-  ChevronRight,
-  MapPin,
-  MapPinned,
-  MapPinOff,
-  Search,
-  X
-} from '@lucide/vue'
 import type {
   LocationAreaDetailModel,
   LocationDetailModel,

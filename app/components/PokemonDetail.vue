@@ -11,7 +11,7 @@
           :title="t('detail.favorite')"
           @click="$emit('toggleFavorite', detail.speciesName)"
         >
-          <Heart class="pokemon-icon" aria-hidden="true" :fill="favorite ? 'currentColor' : 'none'" />
+          <PixelIcon class="pokemon-icon" name="heart" />
         </button>
         <button
           class="r8-btn r8-btn--sm pokemon-icon-btn"
@@ -21,7 +21,7 @@
           :title="t('detail.caught')"
           @click="$emit('toggleCaught', detail.speciesName)"
         >
-          <Check class="pokemon-icon" aria-hidden="true" />
+          <PixelIcon class="pokemon-icon" name="check" />
         </button>
       </div>
     </div>
@@ -70,7 +70,7 @@
           :aria-pressed="shiny"
           @click="$emit('toggleShiny')"
         >
-          <Sparkles class="pokemon-icon" aria-hidden="true" />
+          <PixelIcon class="pokemon-icon" name="sparkles" />
           {{ t('detail.shiny') }}
         </button>
         <button
@@ -79,7 +79,7 @@
           type="button"
           @click="playCry(detail.cries.latest)"
         >
-          <Volume2 class="pokemon-icon" aria-hidden="true" />
+          <PixelIcon class="pokemon-icon" name="volume" />
           {{ t('detail.cry') }}
         </button>
       </div>
@@ -231,7 +231,7 @@
     </div>
 
     <div v-else class="r8-window__body pokemon-detail__empty">
-      <Search class="pokemon-detail__empty-icon" aria-hidden="true" />
+      <PixelIcon class="pokemon-detail__empty-icon" name="search" :size="48" />
       <p>{{ t('detail.selectPrompt') }}</p>
     </div>
 
@@ -242,7 +242,6 @@
 </template>
 
 <script setup lang="ts">
-import { Check, Heart, Search, Sparkles, Volume2 } from '@lucide/vue'
 import type { PokemonDetail } from '../types/pokedex'
 
 const { t, formatNumber } = useAppI18n()

@@ -38,6 +38,26 @@
   --r8-font-display: 'DotGothic16', sans-serif;
 }
 
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: url('../cursors/cursor-default.svg') 6 4, default;
+  }
+
+  a,
+  button:not(:disabled),
+  label[for],
+  select,
+  [role='button']:not([aria-disabled='true']) {
+    cursor: url('../cursors/cursor-pointer.svg') 8 1, pointer;
+  }
+
+  input:not([type='button']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='reset']):not([type='submit']),
+  textarea {
+    cursor: text;
+  }
+}
+
 /* Override Retro8 components for dark theme */
 [data-theme='dark'] .r8-panel {
   background-color: var(--dex-surface);
@@ -240,10 +260,22 @@ button:disabled {
 
 .pokemon-icon {
   display: inline-block;
-  height: 1em;
+  height: var(--pixel-icon-size, 24px);
   pointer-events: none;
-  vertical-align: -0.12em;
-  width: 1em;
+  vertical-align: -0.35rem;
+  width: var(--pixel-icon-size, 24px);
+}
+
+.pixel-icon {
+  background-color: currentColor;
+  display: inline-block;
+  flex: 0 0 auto;
+  height: var(--pixel-icon-size, 24px);
+  image-rendering: pixelated;
+  mask: var(--pixel-icon-url) no-repeat center / contain;
+  pointer-events: none;
+  width: var(--pixel-icon-size, 24px);
+  -webkit-mask: var(--pixel-icon-url) no-repeat center / contain;
 }
 
 .pokemon-icon-btn {
@@ -470,6 +502,17 @@ button:disabled {
   background: var(--dex-surface-2);
   border: 2px solid var(--dex-line);
   padding: 1.25rem;
+}
+
+.about-author__identity {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.about-author__identity h2 {
+  margin: 0;
 }
 
 .about-actions {

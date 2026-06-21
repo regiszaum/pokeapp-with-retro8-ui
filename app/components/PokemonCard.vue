@@ -33,7 +33,7 @@
         :data-r8-target="`#tip-fav-${pokemon.name}`"
         @click="$emit('toggleFavorite', pokemon.name)"
       >
-        <Heart class="pokemon-icon" aria-hidden="true" :fill="favorite ? 'currentColor' : 'none'" />
+        <PixelIcon class="pokemon-icon" name="heart" />
       </button>
       <div :id="`tip-fav-${pokemon.name}`" class="r8-poptip" data-r8-variant="hint" hidden>
         {{ favorite ? t('card.removeFavorite') : t('card.favorite') }}
@@ -48,7 +48,7 @@
         :data-r8-target="`#tip-caught-${pokemon.name}`"
         @click="$emit('toggleCaught', pokemon.name)"
       >
-        <Check class="pokemon-icon" aria-hidden="true" />
+        <PixelIcon class="pokemon-icon" name="check" />
       </button>
       <div :id="`tip-caught-${pokemon.name}`" class="r8-poptip" data-r8-variant="hint" hidden>
         {{ caught ? t('card.caught') : t('card.markCaughtShort') }}
@@ -58,7 +58,6 @@
 </template>
 
 <script setup lang="ts">
-import { Check, Heart } from '@lucide/vue'
 import type { PokemonEntry } from '../types/pokedex'
 
 const { t } = useAppI18n()
